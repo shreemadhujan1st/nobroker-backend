@@ -15,8 +15,9 @@ DEBUG = True
 ALLOWED_HOSTS = []
 
 
-# Application definition
-
+# -----------------------------
+# Installed Apps
+# -----------------------------
 INSTALLED_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",
@@ -27,6 +28,8 @@ INSTALLED_APPS = [
 
     # Third-party apps
     "rest_framework",
+    "rest_framework_simplejwt",
+    "django_filters",
     "corsheaders",
 
     # Local apps
@@ -34,6 +37,10 @@ INSTALLED_APPS = [
     "properties",
 ]
 
+
+# -----------------------------
+# Middleware
+# -----------------------------
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "corsheaders.middleware.CorsMiddleware",
@@ -45,8 +52,13 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
+
 ROOT_URLCONF = "config.urls"
 
+
+# -----------------------------
+# Templates
+# -----------------------------
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
@@ -62,9 +74,13 @@ TEMPLATES = [
     },
 ]
 
+
 WSGI_APPLICATION = "config.wsgi.application"
 
 
+# -----------------------------
+# Database
+# -----------------------------
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
@@ -73,6 +89,9 @@ DATABASES = {
 }
 
 
+# -----------------------------
+# Password Validation
+# -----------------------------
 AUTH_PASSWORD_VALIDATORS = [
     {
         "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
@@ -89,6 +108,9 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
+# -----------------------------
+# Internationalization
+# -----------------------------
 LANGUAGE_CODE = "en-us"
 
 TIME_ZONE = "UTC"
@@ -98,24 +120,49 @@ USE_I18N = True
 USE_TZ = True
 
 
+# -----------------------------
+# Static Files
+# -----------------------------
 STATIC_URL = "static/"
 
+
+# -----------------------------
+# Media Files
+# -----------------------------
+MEDIA_URL = "/media/"
+MEDIA_ROOT = BASE_DIR / "media"
+
+
+# -----------------------------
+# Default Primary Key
+# -----------------------------
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 
-# ---------- Custom User ----------
+# -----------------------------
+# Custom User Model
+# -----------------------------
 AUTH_USER_MODEL = "users.User"
 
 
-# ---------- CORS ----------
+# -----------------------------
+# CORS
+# -----------------------------
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",
 ]
 
 
-# ---------- Django REST Framework ----------
+# -----------------------------
+# Django REST Framework
+# -----------------------------
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (
         "rest_framework_simplejwt.authentication.JWTAuthentication",
+    ),
+    "DEFAULT_FILTER_BACKENDS": (
+        "django_filters.rest_framework.DjangoFilterBackend",
+        "rest_framework.filters.SearchFilter",
+        "rest_framework.filters.OrderingFilter",
     ),
 }

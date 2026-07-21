@@ -1,4 +1,5 @@
 from rest_framework import serializers
+
 from .models import Property, Favorite
 
 
@@ -25,11 +26,16 @@ class PropertySerializer(serializers.ModelSerializer):
 
 class FavoriteSerializer(serializers.ModelSerializer):
     property = PropertySerializer(read_only=True)
+    property_id = serializers.PrimaryKeyRelatedField(
+        queryset=Property.objects.all(),
+        source="property",
+        write_only=True,
+    )
 
     class Meta:
         model = Favorite
         fields = [
             "id",
             "property",
-            "created_at",
+            "property_id",
         ]

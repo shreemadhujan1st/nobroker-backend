@@ -68,7 +68,7 @@ class FavoriteListCreateView(generics.ListCreateAPIView):
         return Favorite.objects.filter(user=self.request.user)
 
     def create(self, request, *args, **kwargs):
-        property_id = request.data.get("property")
+        property_id = request.data.get("property") or request.data.get("property_id")
 
         property_obj = get_object_or_404(
             Property,

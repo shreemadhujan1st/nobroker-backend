@@ -1,12 +1,15 @@
 from django.urls import path
+
 from .views import (
     PropertyListCreateView,
     PropertyDetailView,
     FavoriteListCreateView,
     FavoriteDeleteView,
+    MyPropertiesView,
 )
 
 urlpatterns = [
+
     path(
         "",
         PropertyListCreateView.as_view(),
@@ -14,9 +17,9 @@ urlpatterns = [
     ),
 
     path(
-        "<int:pk>/",
-        PropertyDetailView.as_view(),
-        name="property-detail",
+        "my-properties/",
+        MyPropertiesView.as_view(),
+        name="my-properties",
     ),
 
     path(
@@ -30,4 +33,11 @@ urlpatterns = [
         FavoriteDeleteView.as_view(),
         name="favorite-delete",
     ),
+
+    path(
+        "<int:pk>/",
+        PropertyDetailView.as_view(),
+        name="property-detail",
+    ),
+
 ]

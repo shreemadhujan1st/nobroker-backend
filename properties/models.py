@@ -3,6 +3,12 @@ from django.conf import settings
 
 
 class Property(models.Model):
+
+    LISTING_TYPES = [
+        ("Buy", "Buy"),
+        ("Rent", "Rent"),
+    ]
+
     PROPERTY_TYPES = [
         ("Apartment", "Apartment"),
         ("Villa", "Villa"),
@@ -17,7 +23,14 @@ class Property(models.Model):
     )
 
     title = models.CharField(max_length=200)
+
     description = models.TextField()
+
+    listing_type = models.CharField(
+        max_length=10,
+        choices=LISTING_TYPES,
+        default="Buy",
+    )
 
     price = models.DecimalField(
         max_digits=12,
@@ -54,6 +67,7 @@ class Property(models.Model):
 
 
 class Favorite(models.Model):
+
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,

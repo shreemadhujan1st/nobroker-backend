@@ -13,6 +13,7 @@ class PropertySerializer(serializers.ModelSerializer):
             "owner",
             "title",
             "description",
+            "listing_type",
             "price",
             "location",
             "property_type",
@@ -23,9 +24,17 @@ class PropertySerializer(serializers.ModelSerializer):
             "created_at",
         ]
 
+        read_only_fields = [
+            "id",
+            "owner",
+            "created_at",
+        ]
+
 
 class FavoriteSerializer(serializers.ModelSerializer):
+
     property = PropertySerializer(read_only=True)
+
     property_id = serializers.PrimaryKeyRelatedField(
         queryset=Property.objects.all(),
         source="property",

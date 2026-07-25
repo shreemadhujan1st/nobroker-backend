@@ -35,6 +35,7 @@ class PropertyListCreateView(generics.ListCreateAPIView):
     ]
 
     filterset_fields = [
+        "listing_type",
         "price",
         "property_type",
         "bedrooms",
@@ -51,6 +52,18 @@ class PropertyListCreateView(generics.ListCreateAPIView):
         serializer.save(owner=self.request.user)
 
 
+class MyPropertiesView(generics.ListAPIView):
+    serializer_class = PropertySerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return (
+            Property.objects
+            .filter(owner=self.request.user)
+            .order_by("-created_at")
+        )
+
+
 class PropertyDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Property.objects.all()
     serializer_class = PropertySerializer
@@ -65,10 +78,23 @@ class FavoriteListCreateView(generics.ListCreateAPIView):
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        return Favorite.objects.filter(user=self.request.user)
+        return (
+            Favorite.objects
+            .filter(user=self.request.user)
+            .select_related("property")
+        )
 
     def create(self, request, *args, **kwargs):
-        property_id = request.data.get("property") or request.data.get("property_id")
+
+        property_id = request.data.get("property_id")
+
+        if not property_id:
+            return Response(
+                {
+                    "message": "property_id is required."
+                },
+                status=status.HTTP_400_BAD_REQUEST,
+            )
 
         property_obj = get_object_or_404(
             Property,
@@ -80,7 +106,7 @@ class FavoriteListCreateView(generics.ListCreateAPIView):
             property=property_obj,
         )
 
-        serializer = FavoriteSerializer(favorite)
+        serializer = self.get_serializer(favorite)
 
         if created:
             return Response(

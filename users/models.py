@@ -3,11 +3,16 @@ from django.contrib.auth.models import AbstractUser
 
 
 class User(AbstractUser):
+
     phone = models.CharField(
         max_length=15,
         unique=True,
         blank=True,
         null=True,
+    )
+
+    is_premium = models.BooleanField(
+        default=False,
     )
 
     def __str__(self):

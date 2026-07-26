@@ -1,16 +1,21 @@
 from rest_framework import serializers
-
 from .models import Property, Favorite
 
 
 class PropertySerializer(serializers.ModelSerializer):
+
     owner = serializers.ReadOnlyField(source="owner.username")
+    owner_email = serializers.ReadOnlyField(source="owner.email")
+    owner_phone = serializers.ReadOnlyField(source="owner.phone")
 
     class Meta:
         model = Property
+
         fields = [
             "id",
             "owner",
+            "owner_email",
+            "owner_phone",
             "title",
             "description",
             "listing_type",
@@ -27,6 +32,8 @@ class PropertySerializer(serializers.ModelSerializer):
         read_only_fields = [
             "id",
             "owner",
+            "owner_email",
+            "owner_phone",
             "created_at",
         ]
 
@@ -43,6 +50,7 @@ class FavoriteSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Favorite
+
         fields = [
             "id",
             "property",
